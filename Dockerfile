@@ -8,10 +8,10 @@ RUN apk update && apk upgrade && \
     gem install bundler --no-document && \
     bundle install --path=vendor/bundle
 
-RUN groupadd --gid 3434 circleci && \
-    useradd --uid 3434 --gid circleci --shell /bin/bash --create-home circleci && \
-    echo 'circleci ALL=NOPASSWD: ALL' >> /etc/sudoers.d/50-circleci && \
-    echo 'Defaults    env_keep += "DEBIAN_FRONTEND"' >> /etc/sudoers.d/env_keep
+RUN apk add --no-cache bash git sudo openssh && \
+  addgroup -g 3434 circleci && \
+  adduser -D -u 3434 -G circleci -s /bin/bash circleci && \
+  echo 'circleci ALL=NOPASSWD: ALL' > /etc/sudoers
 
 COPY . /target
 
