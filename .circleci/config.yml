@@ -1,0 +1,80 @@
+version: 2.0
+
+references:
+  container_config: &container_config
+    docker:
+      - image: google/cloud-sdk
+    environment:
+      DOCKERHUB_ORG_NAME: fromscratch
+      ORG_PATH: "github.com/f-scratch"
+      REPO_PATH: "${ORG_PATH}/${CIRCLE_PROJECT_REPONAME}"
+  install_docker_client: &install_docker_client
+    run:
+      name: Install docker client
+      command: |
+        set -x
+        VER="18.05.0-ce"
+        curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+        tar -xz -C /tmp/ -f /tmp/docker-$VER.tgz
+        mv /tmp/docker/* /usr/bin
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: /images
+
+jobs:
+  build_container:
+    <<: *container_config
+    steps:
+      - checkout
+      - setup_remote_docker
+      - *install_docker_client
+      - run:
+          name: Build container images
+          command: |
+            docker build --tag "${PROJECT_NAME}/${CIRCLE_PROJECT_REPONAME}" \
+            --build-arg VCS_REF=`git rev-parse --short HEAD` \
+			      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` .
+            docker images
+      - run:
+          name: save container image to workspace
+          command: |
+            [ ! -d /images ] && mkdir /images
+            docker save -o /images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar "${PROJECT_NAME}/${CIRCLE_PROJECT_REPONAME}"
+            ls /images
+      - persist_to_workspace:
+          root: .
+          paths:
+            - /images
+
+  push_container:
+    <<: *container_config
+    steps:
+      - *attach_workspace
+      - setup_remote_docker
+      - *install_docker_client
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            ls /images
+            docker load -i /images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar
+            docker images
+      - run:
+          name: Show docker images & set tag & push docker hub and gcloud
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push ${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}
+            curl -X POST https://hooks.microbadger.com/images/${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}/7Lgm9UVdeKKqwGjSiqoVssAEuOc=
+            
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build_container
+      - push_container:
+          context: container-registory
+          requires:
+            - build_container
+          filters:
+            branches:
+              only:
+                - /^master/
