@@ -17,10 +17,10 @@ RUN apk update && apk upgrade && \
 
 USER circleci
 
-COPY --chown=circleci:circleci Gemfile* $HOME/target/
-COPY --chown=circleci:circleci Dangerfile $HOME/target/
+COPY --chown=circleci:circleci Gemfile* $HOME/danger/
+COPY --chown=circleci:circleci Dangerfile $HOME/danger/
 
-WORKDIR $HOME/target
+WORKDIR $HOME/danger
 
 RUN gem install bundler --no-document && \
     bundle install --path=vendor/bundle
