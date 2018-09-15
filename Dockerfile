@@ -7,16 +7,18 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.vcs-url="https://github.com/f-scratch/circleci-danger"
 
+ENV HOME=/home/circleci
+
 RUN apk update && apk upgrade && \
-  apk add --no-cache bash git sudo openssh && \
+  apk add --no-cache bash git openssh && \
   addgroup -g 3434 circleci && \
   adduser -D -u 3434 -G circleci -s /bin/bash circleci && \
   echo 'circleci ALL=NOPASSWD: ALL' > /etc/sudoers
 
 USER circleci
 
-COPY Gemfile* $HOME/target/
-COPY Dangerfile $HOME/target/
+COPY --chown=circleci:circleci Gemfile* $HOME/target/
+COPY --chown=circleci:circleci Dangerfile $HOME/target/
 
 WORKDIR $HOME/target
 
