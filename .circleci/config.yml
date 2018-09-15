@@ -8,6 +8,7 @@ references:
       DOCKERHUB_ORG_NAME: fromscratch
       ORG_PATH: "github.com/f-scratch"
       REPO_PATH: "${ORG_PATH}/${CIRCLE_PROJECT_REPONAME}"
+      BASH_ENV: .circleci/checktag.sh
   install_docker_client: &install_docker_client
     run:
       name: Install docker client
@@ -31,15 +32,13 @@ jobs:
       - run:
           name: Build container images
           command: |
-            docker build --tag "${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}" \
-            --build-arg VCS_REF=`git rev-parse --short HEAD` \
-            --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` .
+            docker build --tag "${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}:${version}" .
             docker images
       - run:
           name: save container image to workspace
           command: |
             [ ! -d ~/images ] && mkdir ~/images
-            docker save -o ~/images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar "${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}"
+            docker save -o ~/images/${CIRCLE_PROJECT_REPONAME}-${version}.tar "${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}:${version}"
             ls ~/images
       - persist_to_workspace:
           root: ~/images
@@ -56,25 +55,30 @@ jobs:
           name: Load Docker image layer cache
           command: |
             ls ~/images
-            docker load -i ~/images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar
+            docker load -i ~/images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_TAG}.tar
             docker images
       - run:
           name: Show docker images & set tag & push docker hub and gcloud
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker push ${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}
+            docker push ${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}
             curl -X POST https://hooks.microbadger.com/images/${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}/7Lgm9UVdeKKqwGjSiqoVssAEuOc=
             
 workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build_container
+      - build_container:
+        filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*(-.*)*/ 
       - push_container:
           context: container-registory
           requires:
             - build_container
           filters:
-            branches:
-              only:
-                - /^master/
+            filters:
+              tags:
+                only: /^v[0-9]+(\.[0-9]+)*(-.*)*/
+              branches:
+                ignore: /.*/
