@@ -42,7 +42,7 @@ jobs:
             docker save -o ~/images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar "${PROJECT_NAME}/${CIRCLE_PROJECT_REPONAME}"
             ls ~/images
       - persist_to_workspace:
-          root: .
+          root: ~/.
           paths:
             - ~/images
 
