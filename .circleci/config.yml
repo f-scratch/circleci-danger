@@ -19,7 +19,7 @@ references:
         mv /tmp/docker/* /usr/bin
   attach_workspace: &attach_workspace
     attach_workspace:
-      at: /images
+      at: ~/images
 
 jobs:
   build_container:
@@ -38,13 +38,13 @@ jobs:
       - run:
           name: save container image to workspace
           command: |
-            [ ! -d /images ] && mkdir /images
-            docker save -o /images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar "${PROJECT_NAME}/${CIRCLE_PROJECT_REPONAME}"
-            ls /images
+            [ ! -d ~/images ] && mkdir ~/images
+            docker save -o ~/images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar "${PROJECT_NAME}/${CIRCLE_PROJECT_REPONAME}"
+            ls ~/images
       - persist_to_workspace:
           root: .
           paths:
-            - /images
+            - ~/images
 
   push_container:
     <<: *container_config
@@ -55,15 +55,15 @@ jobs:
       - run:
           name: Load Docker image layer cache
           command: |
-            ls /images
-            docker load -i /images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar
+            ls ~/images
+            docker load -i ~/images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar
             docker images
       - run:
           name: Show docker images & set tag & push docker hub and gcloud
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             docker push ${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}
-            curl -X POST https://hooks.microbadger.com/images/${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}/7Lgm9UVdeKKqwGjSiqoVssAEuOc=
+            curl -X POST https://hooks.microbadger.com~/images/${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}/7Lgm9UVdeKKqwGjSiqoVssAEuOc=
             
 workflows:
   version: 2
