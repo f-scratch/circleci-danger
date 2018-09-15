@@ -15,10 +15,10 @@ RUN apk update && apk upgrade && \
 
 USER circleci
 
-COPY Gemfile* ~/target/
-COPY Dangerfile ~/target/
+COPY Gemfile* $HOME/target/
+COPY Dangerfile $HOME/target/
 
-WORKDIR ~/target
+WORKDIR $HOME/target
 
 RUN gem install bundler --no-document && \
     bundle install --path=vendor/bundle
