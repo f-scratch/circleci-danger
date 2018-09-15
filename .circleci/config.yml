@@ -19,7 +19,7 @@ references:
         mv /tmp/docker/* /usr/bin
   attach_workspace: &attach_workspace
     attach_workspace:
-      at: ~/images
+      at: ${CIRCLE_WORKING_DIRECTORY}/images
 
 jobs:
   build_container:
@@ -42,7 +42,7 @@ jobs:
             docker save -o ~/images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar "${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}"
             ls ~/images
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
             - images
 
