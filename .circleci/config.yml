@@ -19,7 +19,7 @@ references:
         mv /tmp/docker/* /usr/bin
   attach_workspace: &attach_workspace
     attach_workspace:
-      at: ${CIRCLE_WORKING_DIRECTORY}/images
+      at: ~/images
 
 jobs:
   build_container:
