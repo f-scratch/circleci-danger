@@ -31,7 +31,7 @@ jobs:
       - run:
           name: Build container images
           command: |
-            docker build --tag "${PROJECT_NAME}/${CIRCLE_PROJECT_REPONAME}" \
+            docker build --tag "${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}" \
             --build-arg VCS_REF=`git rev-parse --short HEAD` \
             --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` .
             docker images
@@ -39,7 +39,7 @@ jobs:
           name: save container image to workspace
           command: |
             [ ! -d ~/images ] && mkdir ~/images
-            docker save -o ~/images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar "${PROJECT_NAME}/${CIRCLE_PROJECT_REPONAME}"
+            docker save -o ~/images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_SHA1}.tar "${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}"
             ls ~/images
       - persist_to_workspace:
           root: .
