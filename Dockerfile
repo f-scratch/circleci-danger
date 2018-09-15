@@ -15,8 +15,8 @@ RUN apk update && apk upgrade && \
 
 USER circleci
 
-COPY Gemfile* ~/target
-COPY Dangerfile ~/target
+COPY Gemfile* ~/target/
+COPY Dangerfile ~/target/
 
 WORKDIR ~/target
 
