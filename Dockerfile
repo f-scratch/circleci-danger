@@ -1,7 +1,12 @@
 FROM ruby:2.3.1-alpine
 
 MAINTAINER from scratch Co.Ltd.
-LABEL org.label-schema.vcs-url="https://github.com/f-scratch/circleci-danger"
+
+ARG VCS_REF
+ARG BUILD_DATE
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.vcs-url="https://github.com/f-scratch/circleci-danger"\
+      org.label-schema.vcs-ref=$VCS_REF
 
 ENV HOME=/home/circleci
 

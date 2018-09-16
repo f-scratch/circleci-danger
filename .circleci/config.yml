@@ -32,7 +32,10 @@ jobs:
       - run:
           name: Build container images
           command: |
-            docker build --tag "${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}:${version}" .
+            docker build \
+              --tag "${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}:${version}" \
+              --build-arg VCS_REF=`git rev-parse --short HEAD` \
+              --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` .
             docker images
       - run:
           name: Save container image to workspace
