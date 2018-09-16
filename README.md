@@ -17,7 +17,7 @@ Cannot build with
 ## Docker pull
 
 ```
-docker pull fromscratch/circleci-danger:v1.0.0
+docker pull fromscratch/circleci-danger:v1.0.1
 ```
 
 ## Getting Started for CircleCI's setting
@@ -36,7 +36,7 @@ version: 2
 jobs:
   danger:
     docker:
-      - image: fromscratch/circleci-danger:v1.0.0
+      - image: fromscratch/circleci-danger:v1.0.1
     steps:
       - checkout
       - run: cp ~/danger/Dangerfile .
