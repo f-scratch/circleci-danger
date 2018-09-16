@@ -19,6 +19,6 @@ COPY --chown=circleci:circleci Dangerfile $HOME/danger/
 WORKDIR $HOME/danger
 
 RUN gem install bundler --no-document && \
-    bundle install --path=vendor/bundle
+    bundle install
 
 CMD ["/bin/sh"]

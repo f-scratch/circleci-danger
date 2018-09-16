@@ -9,7 +9,7 @@ for circleci danger
 ## Docker pull
 
 ```
-docker pull fromscratch/circleci-danger
+docker pull fromscratch/circleci-danger:v0.1.2
 ```
 
 ## Getting Started for CircleCI's setting
