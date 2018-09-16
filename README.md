@@ -10,7 +10,7 @@ for circleci danger
 
 ruby:2.3.1-alpine
 
-Cannot build with 
+Cannot build with
 - ruby:2.4.*
 - ruby:2.5.*
 
@@ -48,5 +48,15 @@ workflows:
     jobs:
       - danger:
         # When you use contexts
-        context: danger
+          context: danger
+
+  # Execute periodically to update PR status
+  scheduled-workflow:
+    triggers:
+      - schedule:
+          cron: "0 18 * * *"
+    jobs:
+      - danger:
+          # When you use contexts
+          context: danger
 ```
