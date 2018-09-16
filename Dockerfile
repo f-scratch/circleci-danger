@@ -1,4 +1,5 @@
-FROM ruby:2.3.1-alpine
+# FROM ruby:2.3.1-alpine
+FROM ruby:2.5.1-alpine
 MAINTAINER from scratch Co.Ltd.
 
 LABEL org.label-schema.vcs-url="https://github.com/f-scratch/circleci-danger"
