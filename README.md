@@ -1,6 +1,7 @@
 [![CircleCI](https://circleci.com/gh/f-scratch/circleci-danger.svg?style=svg)](https://circleci.com/gh/f-scratch/circleci-danger)
 [![](https://images.microbadger.com/badges/version/fromscratch/circleci-danger.svg)](https://microbadger.com/images/fromscratch/circleci-danger "Get your own version badge on microbadger.com")
 [![](https://images.microbadger.com/badges/image/fromscratch/circleci-danger.svg)](https://microbadger.com/images/fromscratch/circleci-danger "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/commit/fromscratch/circleci-danger.svg)](https://microbadger.com/images/fromscratch/circleci-danger "Get your own commit badge on microbadger.com")
 
 # circleci-danger
 
