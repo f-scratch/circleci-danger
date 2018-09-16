@@ -55,6 +55,10 @@ workflows:
     triggers:
       - schedule:
           cron: "0 18 * * *"
+          filters:
+            branches:
+              ignore:
+                - master
     jobs:
       - danger:
           # When you use contexts
