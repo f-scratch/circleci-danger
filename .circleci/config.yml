@@ -35,7 +35,7 @@ jobs:
             docker build --tag "${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}:${version}" .
             docker images
       - run:
-          name: save container image to workspace
+          name: Save container image to workspace
           command: |
             [ ! -d ~/images ] && mkdir ~/images
             docker save -o ~/images/${CIRCLE_PROJECT_REPONAME}-${version}.tar "${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}:${version}"
@@ -52,16 +52,20 @@ jobs:
       - setup_remote_docker
       - *install_docker_client
       - run:
-          name: Load Docker image layer cache
+          name: Load Docker image from workspaces
           command: |
             ls ~/images
             docker load -i ~/images/${CIRCLE_PROJECT_REPONAME}-${CIRCLE_TAG}.tar
             docker images
       - run:
-          name: Show docker images & set tag & push docker hub and gcloud
+          name: Tagging Docker images to latest
+          command: docker tag ${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG} ${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}:latest
+      - run:
+          name: Login and push container registries
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             docker push ${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}
+            docker push ${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}:latest
             curl -X POST https://hooks.microbadger.com/images/${DOCKERHUB_ORG_NAME}/${CIRCLE_PROJECT_REPONAME}/7Lgm9UVdeKKqwGjSiqoVssAEuOc=
             
 workflows:
