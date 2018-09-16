@@ -6,10 +6,18 @@
 
 for circleci danger
 
+## Requirements
+
+ruby:2.3.1-alpine
+
+Cannot build with 
+- ruby:2.4.*
+- ruby:2.5.*
+
 ## Docker pull
 
 ```
-docker pull fromscratch/circleci-danger:v0.1.2
+docker pull fromscratch/circleci-danger:v1.0.0
 ```
 
 ## Getting Started for CircleCI's setting
@@ -28,7 +36,7 @@ version: 2
 jobs:
   danger:
     docker:
-      - image: fromscratch/circleci-danger
+      - image: fromscratch/circleci-danger:v1.0.0
     steps:
       - checkout
       - run: cp ~/danger/Dangerfile .
