@@ -35,9 +35,6 @@ if has_base_release_prd && !has_head_release_stg && !has_head_hotfix
   warn(':evergreen_tree: `release-prd`にmergeできるのは、`release-stg`or`hotfix/~`だけかもしれないー')
 end
 
-# Check conflict
-conflict_checker.check_conflict_and_comment
-
 # Check TODO
 todoist.message = "TODO対応してくれないの？:cry:"
 todoist.warn_for_todos
