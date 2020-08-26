@@ -64,6 +64,7 @@ DEPENDENCIES
   danger
   danger-lgtm
   danger-todoist
+  kramdown (>= 2.3.0)
 
 BUNDLED WITH
    1.17.3
