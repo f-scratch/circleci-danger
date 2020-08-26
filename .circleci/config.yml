@@ -80,7 +80,7 @@ workflows:
             tags:
               only: /^v[0-9]+(\.[0-9]+)*(-.*)*/
       - push_container:
-          context: container-registry
+          context: container-registory
           requires:
             - build_container
           filters:
