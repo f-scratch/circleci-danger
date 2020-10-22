@@ -19,6 +19,7 @@ USER circleci
 
 COPY --chown=circleci:circleci Gemfile* $HOME/danger/
 COPY --chown=circleci:circleci Dangerfile $HOME/danger/
+COPY --chown=circleci:circleci Dangerfile4th $HOME/danger/
 
 WORKDIR $HOME/danger
 
