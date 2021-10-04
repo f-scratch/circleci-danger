@@ -1,4 +1,4 @@
-FROM ruby:2.3.1-alpine
+FROM ruby:2.7.1-alpine
 
 ARG VCS_REF
 ARG BUILD_DATE
@@ -23,7 +23,7 @@ COPY --chown=circleci:circleci Dangerfile4th $HOME/danger/
 
 WORKDIR $HOME/danger
 
-RUN gem install bundler -v 1.17.3 --no-document && \
-    bundle _1.17.3_ install
+RUN gem install bundler --no-document && \
+    bundle install
 
 CMD ["/bin/sh"]
