@@ -1,2 +1,2 @@
 # Change to the path of the dangerfile you want to import.
-danger.import_dangerfile(github: "f-scratch/dangerfile", branch: "feat/ruby_2.7.1_danger_8.4.0", path: "Dangerfile4th")
+danger.import_dangerfile(github: "f-scratch/dangerfile", branch: "master", path: "Dangerfile4th")
