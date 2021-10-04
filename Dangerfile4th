@@ -1,2 +1,2 @@
 # Change to the path of the dangerfile you want to import.
-danger.import_dangerfile(github: "f-scratch/dangerfile", branch: "master", path: "Dangerfile4th")
+danger.import_dangerfile(github: "f-scratch/dangerfile", branch: "feat/add_circleci", path: "Dangerfile4th")
